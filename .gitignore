@@ -1,1 +1,11 @@
+# backend
 backend/server_ping
+
+# frontend
+webapp/node_modules/
+
+# OS generated files
+.DS_Store
+
+# python
+__pycache__/
