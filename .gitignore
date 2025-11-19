@@ -1,5 +1,7 @@
 # backend
 backend/server_ping
+backend/__pycache__/
+backend/.env
 
 # frontend
 webapp/node_modules/

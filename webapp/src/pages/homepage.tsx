@@ -1,17 +1,14 @@
-import SiteHeader from "../components/SiteHeader";
-import Hero from "../components/Hero";
-import FeatureGrid from "../components/FeatureGrid";
-import CTASection from "../components/CTASection";
-import SiteFooter from "../components/SiteFooter";
+import type { ReactNode } from "react";
+import SiteHeader from '../components/SiteHeader';
+import SiteFooter from '../components/SiteFooter';
+import HomePageBody from "../components/Body";
 
-export default function HomePage() {
+export default function Layout({ children }: { children?: ReactNode }) {
   return (
-    <div className="min-h-dvh w-full overflow-x-hidden bg-linear-to-br from-slate-950 via-slate-900 to-slate-800 text-slate-100">
+    <div className="min-h-screen flex flex-col bg-slate-950 text-slate-50">
       <SiteHeader />
-      <main>
-        <Hero />
-        <FeatureGrid />
-        <CTASection />
+      <main className="flex-1">{children}
+        <HomePageBody />
       </main>
       <SiteFooter />
     </div>
