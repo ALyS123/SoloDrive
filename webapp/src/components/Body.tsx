@@ -18,7 +18,7 @@ export default function HomePage() {
 
             <h1 className="mt-5 text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-slate-50">
               One space for{" "}
-              <span className="bg-gradient-to-r from-sky-400 via-fuchsia-400 to-violet-400 bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-sky-400 via-fuchsia-400 to-violet-400 bg-clip-text text-transparent">
                 chat, voice, and cloud storage
               </span>
               .
@@ -32,8 +32,8 @@ export default function HomePage() {
 
             {/* CTAs */}
             <div className="mt-6 flex flex-wrap items-center gap-4">
-              <button className="group relative inline-flex items-center gap-2 overflow-hidden rounded-xl bg-gradient-to-r from-sky-500 via-fuchsia-500 to-violet-500 px-5 py-2.5 text-sm font-semibold tracking-wide text-white shadow-lg shadow-sky-500/40 transition-all duration-200 hover:scale-[1.03] hover:shadow-2xl hover:shadow-fuchsia-500/45">
-                <span className="pointer-events-none absolute inset-0 translate-x-[-120%] bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-80 transition-transform duration-700 group-hover:translate-x-[120%]" />
+              <button className="group relative inline-flex items-center gap-2 overflow-hidden rounded-xl bg-linear-to-r from-sky-500 via-fuchsia-500 to-violet-500 px-5 py-2.5 text-sm font-semibold tracking-wide text-white shadow-lg shadow-sky-500/40 transition-all duration-200 hover:scale-[1.03] hover:shadow-2xl hover:shadow-fuchsia-500/45">
+                <span className="pointer-events-none absolute inset-0 translate-x-[-120%] bg-linear-to-r from-transparent via-white/30 to-transparent opacity-80 transition-transform duration-700 group-hover:translate-x-[120%]" />
                 <span className="relative z-10">Get started free</span>
               </button>
 
@@ -82,7 +82,7 @@ export default function HomePage() {
 
           {/* RIGHT: fake app preview */}
           <div className="relative">
-            <div className="absolute -inset-4 rounded-3xl bg-gradient-to-tr from-sky-500/20 via-fuchsia-500/10 to-violet-500/20 blur-2xl" />
+            <div className="absolute -inset-4 rounded-3xl bg-linear-to-tr from-sky-500/20 via-fuchsia-500/10 to-violet-500/20 blur-2xl" />
             <div className="relative rounded-3xl border border-slate-700/70 bg-slate-900/90 p-4 shadow-2xl shadow-sky-900/40 backdrop-blur-xl">
               {/* top bar */}
               <div className="mb-3 flex items-center justify-between">
@@ -126,7 +126,7 @@ export default function HomePage() {
                       <span>72% used</span>
                     </div>
                     <div className="h-1.5 w-full rounded-full bg-slate-800">
-                      <div className="h-1.5 w-3/4 rounded-full bg-gradient-to-r from-sky-400 to-fuchsia-400" />
+                      <div className="h-1.5 w-3/4 rounded-full bg-linear-to-r from-sky-400 to-fuchsia-400" />
                     </div>
                   </div>
                 </div>
@@ -144,7 +144,7 @@ export default function HomePage() {
 
                   <div className="flex-1 space-y-2 overflow-hidden">
                     <div className="flex gap-2">
-                      <div className="mt-1 h-5 w-5 rounded-full bg-gradient-to-br from-sky-500 to-fuchsia-500" />
+                      <div className="mt-1 h-5 w-5 rounded-full bg-linear-to-br from-sky-500 to-fuchsia-500" />
                       <div>
                         <p className="text-[10px] text-slate-400">You · just now</p>
                         <p className="text-[11px] text-slate-100">
@@ -179,7 +179,7 @@ export default function HomePage() {
                     <span className="flex-1 text-[11px] text-slate-500">
                       Message #general or /upload
                     </span>
-                    <span className="rounded-lg bg-gradient-to-r from-sky-500 to-fuchsia-500 px-2 py-1 text-[10px] font-semibold text-white">
+                    <span className="rounded-lg bg-linear-to-r from-sky-500 to-fuchsia-500 px-2 py-1 text-[10px] font-semibold text-white">
                       Send
                     </span>
                   </div>
