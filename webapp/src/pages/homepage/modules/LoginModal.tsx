@@ -5,18 +5,25 @@ import React, { useState, useEffect } from "react";
 interface LoginModalProps {
   open: boolean;
   onClose: () => void;
+  onOpenSignup: () => void;
 }
 
-export default function LoginModal({ open, onClose }: LoginModalProps) {
+export default function LoginModal({ open, onClose, onOpenSignup }: LoginModalProps) {
   const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const canSubmit = email.trim() !== "" && password.trim() !== "";
 
   // Close on ESC
   useEffect(() => {
-    if (!open) return; // don't attach when closed
+    if (!open) return;
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         setShowPassword(false);
+        setEmail("");
+        setPassword("");
         onClose();
       }
     };
@@ -29,11 +36,29 @@ export default function LoginModal({ open, onClose }: LoginModalProps) {
 
   const handleBackdropClick = () => {
     setShowPassword(false);
+    setEmail("");
+    setPassword("");
     onClose();
   };
 
   const stopPropagation: React.MouseEventHandler<HTMLDivElement> = (e) => {
     e.stopPropagation();
+  };
+
+  const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
+    e.preventDefault();
+    if (!canSubmit) return;
+
+    // TODO: call your login API here with { email, password }
+    console.log("Logging in with:", { email, password });
+  };
+
+  const handleSwitchToSignup = () => {
+    setShowPassword(false);
+    setEmail("");
+    setPassword("");
+    onClose();
+    onOpenSignup();
   };
 
   return (
@@ -64,6 +89,8 @@ export default function LoginModal({ open, onClose }: LoginModalProps) {
               type="button"
               onClick={() => {
                 setShowPassword(false);
+                setEmail("");
+                setPassword("");
                 onClose();
               }}
               className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-slate-600/70 bg-slate-900/90 text-slate-300/80 text-xs hover:border-sky-400/80 hover:text-sky-100"
@@ -73,15 +100,18 @@ export default function LoginModal({ open, onClose }: LoginModalProps) {
           </div>
 
           {/* Form */}
-          <form className="space-y-4">
+          <form className="space-y-4" onSubmit={handleSubmit}>
             <div className="space-y-1.5">
               <label className="text-xs font-medium text-slate-200">
                 Email
               </label>
               <input
                 type="email"
+                required
                 className="w-full rounded-lg border border-slate-700 bg-slate-950/80 px-3 py-2 text-sm text-slate-100 outline-none ring-0 placeholder:text-slate-500 focus:border-sky-400 focus:ring-1 focus:ring-sky-400"
                 placeholder=""
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
 
@@ -94,13 +124,16 @@ export default function LoginModal({ open, onClose }: LoginModalProps) {
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
+                  required
                   className="w-full rounded-lg border border-slate-700 bg-slate-950/80 px-3 pr-16 py-2 text-sm text-slate-100 outline-none ring-0 placeholder:text-slate-500 focus:border-sky-400 focus:ring-1 focus:ring-sky-400"
                   placeholder=""
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword((prev) => !prev)}
-                  className="absolute inset-y-0 right-0 flex items-center pr-3 text-[11px] font-medium text-sky-400 hover:text-sky-300"
+                  className="absolute inset-y-0 right-0 flex items-center pr-3 text-[11px] font-medium text-sky-400 hover:text-sky-300 cursor-pointer hover:drop-shadow-[0_0_8px_rgba(56,189,248,0.9)]"
                   aria-label={showPassword ? "Hide password" : "Show password"}
                 >
                   {showPassword ? "Hide" : "Show"}
@@ -126,7 +159,8 @@ export default function LoginModal({ open, onClose }: LoginModalProps) {
 
             <button
               type="submit"
-              className="mt-2 inline-flex w-full items-center justify-center rounded-xl bg-linear-to-r from-sky-500 via-fuchsia-500 to-violet-500 px-4 py-2.5 text-sm font-semibold tracking-wide text-white shadow-lg shadow-sky-500/40 transition-all duration-200 hover:scale-[1.02] hover:shadow-2xl hover:shadow-fuchsia-500/45"
+              disabled={!canSubmit}
+              className="mt-2 inline-flex w-full items-center justify-center rounded-xl bg-linear-to-r from-sky-500 via-fuchsia-500 to-violet-500 px-4 py-2.5 text-sm font-semibold tracking-wide text-white shadow-lg shadow-sky-500/40 transition-all duration-200 hover:scale-[1.02] hover:shadow-2xl hover:shadow-fuchsia-500/45 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Log in
             </button>
@@ -134,7 +168,13 @@ export default function LoginModal({ open, onClose }: LoginModalProps) {
 
           <p className="text-center text-[11px] text-slate-400/90">
             Don&apos;t have an account?{" "}
-            <span className="font-medium text-sky-400">Sign up instead</span>
+            <button
+              type="button"
+              onClick={handleSwitchToSignup}
+              className="font-medium text-sky-400 hover:text-sky-300 cursor-pointer hover:drop-shadow-[0_0_10px_rgba(56,189,248,0.9)]"
+            >
+              Sign up instead
+            </button>
           </p>
         </div>
       </div>

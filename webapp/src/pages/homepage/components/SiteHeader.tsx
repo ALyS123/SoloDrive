@@ -96,9 +96,21 @@ export default function SiteHeader() {
         </div>
       </header>
 
-      {/* Modals */}
-      <LoginModal open={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
-      <SignupModal open={isSignupOpen} onClose={() => setIsSignupOpen(false)} />
+            {/* Modals */}
+      <LoginModal
+        open={isLoginOpen}
+        onClose={() => setIsLoginOpen(false)}
+        onOpenSignup={() => {
+          setIsLoginOpen(false); // close login
+          setIsSignupOpen(true); // open signup
+        }}
+      />
+
+      <SignupModal
+        open={isSignupOpen}
+        onClose={() => setIsSignupOpen(false)}
+      />
+
     </>
   );
 }

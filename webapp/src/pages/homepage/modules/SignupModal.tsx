@@ -10,6 +10,9 @@ interface SignupModalProps {
 export default function SignupModal({ open, onClose }: SignupModalProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
@@ -19,6 +22,15 @@ export default function SignupModal({ open, onClose }: SignupModalProps) {
   const hasUpper = /[A-Z]/.test(password);
   const hasNumber = /[0-9]/.test(password);
   const passwordsMatch = password.length > 0 && password === confirmPassword;
+
+  const isFormValid =
+    username.trim() !== "" &&
+    email.trim() !== "" &&
+    hasMinLength &&
+    hasSymbol &&
+    hasUpper &&
+    hasNumber &&
+    passwordsMatch;
 
   // Close on ESC
   useEffect(() => {
@@ -51,6 +63,18 @@ export default function SignupModal({ open, onClose }: SignupModalProps) {
     }`;
 
   const icon = (ok: boolean) => (ok ? "✓" : "✕");
+
+  const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
+    e.preventDefault();
+
+    if (!isFormValid) {
+      // Do nothing if invalid
+      return;
+    }
+
+    // TODO: hook up actual signup logic here
+    console.log("Signup payload:", { username, email, password });
+  };
 
   return (
     <div
@@ -86,7 +110,7 @@ export default function SignupModal({ open, onClose }: SignupModalProps) {
           </div>
 
           {/* Form */}
-          <form className="space-y-4">
+          <form className="space-y-4" onSubmit={handleSubmit}>
             <div className="space-y-1.5">
               <label className="text-xs font-medium text-slate-200">
                 User name
@@ -95,6 +119,8 @@ export default function SignupModal({ open, onClose }: SignupModalProps) {
                 type="text"
                 className="w-full rounded-lg border border-slate-700 bg-slate-950/80 px-3 py-2 text-sm text-slate-100 outline-none ring-0 placeholder:text-slate-500 focus:border-fuchsia-400 focus:ring-1 focus:ring-fuchsia-400"
                 placeholder=""
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
               />
             </div>
 
@@ -106,6 +132,8 @@ export default function SignupModal({ open, onClose }: SignupModalProps) {
                 type="email"
                 className="w-full rounded-lg border border-slate-700 bg-slate-950/80 px-3 py-2 text-sm text-slate-100 outline-none ring-0 placeholder:text-slate-500 focus:border-fuchsia-400 focus:ring-1 focus:ring-fuchsia-400"
                 placeholder=""
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
 
@@ -189,7 +217,12 @@ export default function SignupModal({ open, onClose }: SignupModalProps) {
 
             <button
               type="submit"
-              className="mt-2 inline-flex w-full items-center justify-center rounded-xl bg-linear-to-r from-sky-500 via-fuchsia-500 to-violet-500 px-4 py-2.5 text-sm font-semibold tracking-wide text-white shadow-lg shadow-fuchsia-500/40 transition-all duration-200 hover:scale-[1.02] hover:shadow-2xl hover:shadow-sky-500/45"
+              disabled={!isFormValid}
+              className={`mt-2 inline-flex w-full items-center justify-center rounded-xl bg-linear-to-r from-sky-500 via-fuchsia-500 to-violet-500 px-4 py-2.5 text-sm font-semibold tracking-wide text-white shadow-lg shadow-fuchsia-500/40 transition-all duration-200 ${
+                isFormValid
+                  ? "hover:scale-[1.02] hover:shadow-2xl hover:shadow-sky-500/45"
+                  : "opacity-50 cursor-not-allowed"
+              }`}
             >
               Sign up
             </button>
