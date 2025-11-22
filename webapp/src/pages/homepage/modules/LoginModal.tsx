@@ -1,6 +1,6 @@
 // webapp/src/pages/homepage/modules/LoginModal.tsx
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 interface LoginModalProps {
   open: boolean;
@@ -8,11 +8,27 @@ interface LoginModalProps {
 }
 
 export default function LoginModal({ open, onClose }: LoginModalProps) {
-  if (!open) return null;
-
   const [showPassword, setShowPassword] = useState(false);
 
+  // Close on ESC
+  useEffect(() => {
+    if (!open) return; // don't attach when closed
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setShowPassword(false);
+        onClose();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [open, onClose]);
+
+  if (!open) return null;
+
   const handleBackdropClick = () => {
+    setShowPassword(false);
     onClose();
   };
 
@@ -46,7 +62,10 @@ export default function LoginModal({ open, onClose }: LoginModalProps) {
 
             <button
               type="button"
-              onClick={onClose}
+              onClick={() => {
+                setShowPassword(false);
+                onClose();
+              }}
               className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-slate-600/70 bg-slate-900/90 text-slate-300/80 text-xs hover:border-sky-400/80 hover:text-sky-100"
             >
               ✕
@@ -62,7 +81,7 @@ export default function LoginModal({ open, onClose }: LoginModalProps) {
               <input
                 type="email"
                 className="w-full rounded-lg border border-slate-700 bg-slate-950/80 px-3 py-2 text-sm text-slate-100 outline-none ring-0 placeholder:text-slate-500 focus:border-sky-400 focus:ring-1 focus:ring-sky-400"
-                placeholder="you@example.com"
+                placeholder=""
               />
             </div>
 
@@ -76,7 +95,7 @@ export default function LoginModal({ open, onClose }: LoginModalProps) {
                 <input
                   type={showPassword ? "text" : "password"}
                   className="w-full rounded-lg border border-slate-700 bg-slate-950/80 px-3 pr-16 py-2 text-sm text-slate-100 outline-none ring-0 placeholder:text-slate-500 focus:border-sky-400 focus:ring-1 focus:ring-sky-400"
-                  placeholder="••••••••"
+                  placeholder=""
                 />
                 <button
                   type="button"
