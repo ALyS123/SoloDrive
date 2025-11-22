@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
-import SiteHeader from '../components/SiteHeader';
-import SiteFooter from '../components/SiteFooter';
-import HomePageBody from "../components/Body";
+import SiteHeader from './components/SiteHeader.tsx';
+import SiteFooter from '../../components/SiteFooter';
+import HomePageBody from "../../components/Body";
 
 export default function Layout({ children }: { children?: ReactNode }) {
   return (
