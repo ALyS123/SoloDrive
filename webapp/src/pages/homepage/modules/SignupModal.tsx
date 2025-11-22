@@ -1,6 +1,6 @@
 // webapp/src/pages/homepage/modules/SignupModal.tsx
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 interface SignupModalProps {
   open: boolean;
@@ -8,6 +8,18 @@ interface SignupModalProps {
 }
 
 export default function SignupModal({ open, onClose }: SignupModalProps) {
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  // derived checks
+  const hasMinLength = password.length >= 8;
+  const hasSymbol = /[^A-Za-z0-9]/.test(password);
+  const hasUpper = /[A-Z]/.test(password);
+  const hasNumber = /[0-9]/.test(password);
+  const passwordsMatch = password.length > 0 && password === confirmPassword;
+
   // Close on ESC
   useEffect(() => {
     if (!open) return;
@@ -31,6 +43,14 @@ export default function SignupModal({ open, onClose }: SignupModalProps) {
   const stopPropagation: React.MouseEventHandler<HTMLDivElement> = (e) => {
     e.stopPropagation();
   };
+
+  // theme-matching requirement colors: fuchsia when unmet, cyan when satisfied
+  const requirementClass = (ok: boolean) =>
+    `flex items-center gap-1.5 text-[11px] ${
+      ok ? "text-sky-300" : "text-fuchsia-300"
+    }`;
+
+  const icon = (ok: boolean) => (ok ? "✓" : "✕");
 
   return (
     <div
@@ -69,12 +89,12 @@ export default function SignupModal({ open, onClose }: SignupModalProps) {
           <form className="space-y-4">
             <div className="space-y-1.5">
               <label className="text-xs font-medium text-slate-200">
-                Display name
+                User name
               </label>
               <input
                 type="text"
                 className="w-full rounded-lg border border-slate-700 bg-slate-950/80 px-3 py-2 text-sm text-slate-100 outline-none ring-0 placeholder:text-slate-500 focus:border-fuchsia-400 focus:ring-1 focus:ring-fuchsia-400"
-                placeholder="Ali"
+                placeholder=""
               />
             </div>
 
@@ -85,43 +105,86 @@ export default function SignupModal({ open, onClose }: SignupModalProps) {
               <input
                 type="email"
                 className="w-full rounded-lg border border-slate-700 bg-slate-950/80 px-3 py-2 text-sm text-slate-100 outline-none ring-0 placeholder:text-slate-500 focus:border-fuchsia-400 focus:ring-1 focus:ring-fuchsia-400"
-                placeholder="you@example.com"
+                placeholder=""
               />
             </div>
 
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              <div className="space-y-1.5">
-                <label className="text-xs font-medium text-slate-200">
-                  Password
-                </label>
-                <input
-                  type="password"
-                  className="w-full rounded-lg border border-slate-700 bg-slate-950/80 px-3 py-2 text-sm text-slate-100 outline-none ring-0 placeholder:text-slate-500 focus:border-fuchsia-400 focus:ring-1 focus:ring-fuchsia-400"
-                  placeholder="••••••••"
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="text-xs font-medium text-slate-200">
-                  Confirm
-                </label>
-                <input
-                  type="password"
-                  className="w-full rounded-lg border border-slate-700 bg-slate-950/80 px-3 py-2 text-sm text-slate-100 outline-none ring-0 placeholder:text-slate-500 focus:border-fuchsia-400 focus:ring-1 focus:ring-fuchsia-400"
-                  placeholder="••••••••"
-                />
-              </div>
-            </div>
-
-            <div className="space-y-2">
+            {/* Password – full width with requirements */}
+            <div className="space-y-1.5">
               <label className="text-xs font-medium text-slate-200">
-                Preferred username / handle
+                Password
               </label>
-              <input
-                type="text"
-                className="w-full rounded-lg border border-slate-700 bg-slate-950/80 px-3 py-2 text-sm text-slate-100 outline-none ring-0 placeholder:text-slate-500 focus:border-fuchsia-400 focus:ring-1 focus:ring-fuchsia-400"
-                placeholder="@solodriver"
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  className="w-full rounded-lg border border-slate-700 bg-slate-950/80 px-3 pr-16 py-2 text-sm text-slate-100 outline-none ring-0 placeholder:text-slate-500 focus:border-fuchsia-400 focus:ring-1 focus:ring-fuchsia-400"
+                  placeholder=""
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  className="absolute inset-y-0 right-0 flex items-center pr-3 text-[11px] font-medium text-fuchsia-400 hover:text-fuchsia-300"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? "Hide" : "Show"}
+                </button>
+              </div>
+
+              {/* Password requirements */}
+              <div className="mt-1 space-y-0.5">
+                <div className={requirementClass(hasMinLength)}>
+                  <span>{icon(hasMinLength)}</span>
+                  <span>At least 8 characters</span>
+                </div>
+                <div className={requirementClass(hasSymbol)}>
+                  <span>{icon(hasSymbol)}</span>
+                  <span>At least 1 unique symbol</span>
+                </div>
+                <div className={requirementClass(hasUpper)}>
+                  <span>{icon(hasUpper)}</span>
+                  <span>At least 1 capital letter</span>
+                </div>
+                <div className={requirementClass(hasNumber)}>
+                  <span>{icon(hasNumber)}</span>
+                  <span>At least 1 number</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Confirm password below */}
+            <div className="space-y-1.5">
+              <label className="text-xs font-medium text-slate-200">
+                Confirm password
+              </label>
+              <div className="relative">
+                <input
+                  type={showConfirm ? "text" : "password"}
+                  className="w-full rounded-lg border border-slate-700 bg-slate-950/80 px-3 pr-16 py-2 text-sm text-slate-100 outline-none ring-0 placeholder:text-slate-500 focus:border-fuchsia-400 focus:ring-1 focus:ring-fuchsia-400"
+                  placeholder=""
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirm((prev) => !prev)}
+                  className="absolute inset-y-0 right-0 flex items-center pr-3 text-[11px] font-medium text-fuchsia-400 hover:text-fuchsia-300"
+                  aria-label={
+                    showConfirm ? "Hide confirm password" : "Show confirm password"
+                  }
+                >
+                  {showConfirm ? "Hide" : "Show"}
+                </button>
+              </div>
+
+              {/* Confirm requirement */}
+              <div className="mt-1">
+                <div className={requirementClass(passwordsMatch)}>
+                  <span>{icon(passwordsMatch)}</span>
+                  <span>Passwords match</span>
+                </div>
+              </div>
             </div>
 
             <button
